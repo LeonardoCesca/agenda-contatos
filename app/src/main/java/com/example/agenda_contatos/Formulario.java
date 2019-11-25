@@ -4,6 +4,8 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import android.view.Menu;
 import android.view.MenuItem;
 
 public class Formulario extends AppCompatActivity {
@@ -27,9 +29,16 @@ public class Formulario extends AppCompatActivity {
 
         if(id == android.R.id.home) {
             this.finish();
+        } else if (id == R.id.menu_formulario_ok) {
+            return false;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_formulario, menu);
+        return true;
+    }
 }
