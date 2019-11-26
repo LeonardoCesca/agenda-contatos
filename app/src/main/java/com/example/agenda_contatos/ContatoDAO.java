@@ -69,6 +69,13 @@ public class ContatoDAO extends SQLiteOpenHelper {
         getWritableDatabase().update(TABELA, values, "id=?", idParaAlterar);
     }
 
+    public boolean isContato(String telefone){
+        String[] parametros = {telefone};
+        Cursor cursor = getReadableDatabase().rawQuery("SELECT telefone FROM " + TABELA + " WHERE telefone=?", parametros);
+        int total = cursor.getCount();
+        return total > 0;
+    }
+
     public List<Contato> getLista(){
         List<Contato> contatos = new ArrayList<Contato>();
         Cursor cursor = getReadableDatabase().rawQuery("SELECT * FROM " + TABELA + ";", null);
