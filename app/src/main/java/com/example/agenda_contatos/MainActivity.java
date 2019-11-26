@@ -9,8 +9,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.View;
+import android.widget.ListView;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    ListView minhaLista;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,5 +31,19 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        minhaLista = (ListView) findViewById(R.id.minhaLista);
+    }
+    @Override
+    protected void onResume() {
+        carregaLista();
+        super.onResume();
+    }
+    private void carregaLista(){
+        ContatoDAO dao = new ContatoDAO(this);
+        List<Contato> contatos = dao.getLista();
+        dao.close();
+        ContatoAdaptador adaptador = new ContatoAdaptador(this, contatos);
+
+        this.minhaLista.setAdapter(adaptador);
     }
 }
