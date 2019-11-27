@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         ContatoDAO dao = new ContatoDAO(this);
         List<Contato> contatos = dao.getLista();
         dao.close();
-        ContatoAdaptador adaptador = new ContatoAdaptador(this, contatos);
+        ContatoAdaptador adaptador = new ContatoAdaptador(contatos, this);
 
         this.minhaLista.setAdapter(adaptador);
     }

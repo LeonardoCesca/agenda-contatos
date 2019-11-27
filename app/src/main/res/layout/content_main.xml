@@ -9,6 +9,7 @@
     tools:showIn="@layout/activity_main">
 
     <ListView
+        android:id="@+id/minhaLista"
         android:layout_width="409dp"
         android:layout_height="673dp"
         tools:layout_editor_absoluteX="1dp"

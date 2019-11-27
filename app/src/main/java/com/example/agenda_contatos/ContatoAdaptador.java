@@ -16,7 +16,7 @@ public class ContatoAdaptador extends BaseAdapter {
     private final List<Contato> contatos;
     private final Activity activity;
 
-    public ContatoAdaptador( Activity activity, List<Contato> contatos) {
+    public ContatoAdaptador( List<Contato> contatos, Activity activity) {
         this.contatos = contatos;
         this.activity = activity;
     }
