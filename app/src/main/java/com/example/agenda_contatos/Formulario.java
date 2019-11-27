@@ -11,6 +11,8 @@ import android.view.MenuItem;
 
 public class Formulario extends AppCompatActivity {
 
+    FormularioHelper helper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,20 +49,48 @@ public class Formulario extends AppCompatActivity {
         Log.i("Meu Log", String.valueOf(meuContato2.getId()));
 
         Log.i("Meu Log", meuContato2.toString());
+
+        this.helper = new FormularioHelper(this);
     }
 
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//
+//        int id = item.getItemId();
+//
+//        if(id == android.R.id.home) {
+//            this.finish();
+//        } else if (id == R.id.menu_formulario_ok) {
+//            return false;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        int id = item.getItemId();
+        switch (item.getItemId()) {
+            case R.id.menu_formulario_ok:
 
-        if(id == android.R.id.home) {
-            this.finish();
-        } else if (id == R.id.menu_formulario_ok) {
-            return false;
+                Contato contato = helper.pegaContatoDoFormulario();
+                ContatoDAO dao = new ContatoDAO(Formulario.this);
+
+                if(contato.getId() == null){
+                    dao.inserirContato(contato);
+                }else{
+                    dao.alteraContato(contato);
+                }
+
+                dao.close();
+
+
+
+                finish();
+                return false;
+
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
