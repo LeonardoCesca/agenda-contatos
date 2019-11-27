@@ -8,6 +8,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.view.ContextMenu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
@@ -32,7 +34,29 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         minhaLista = (ListView) findViewById(R.id.minhaLista);
+        registerForContextMenu(minhaLista);
     }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+
+        final MenuItem itemLigar = menu.add("Ligar para Contato");
+        final MenuItem itemSMS = menu.add("Enviar SMS");
+        final MenuItem itemApagar = menu.add("Apagar Contato");
+
+        itemApagar.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                
+                return false;
+            }
+        });
+
+
+
+        super.onCreateContextMenu(menu, v, menuInfo);
+    }
+
     @Override
     protected void onResume() {
         carregaLista();
