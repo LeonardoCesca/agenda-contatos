@@ -2,6 +2,7 @@ package com.example.agenda_contatos;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -85,7 +86,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        itemSMS.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Intent intentSms = new Intent(Intent.ACTION_VIEW);
+                intentSms.setData(Uri.parse("sms:"+contatoSelecionado.getTelefone()));
 
+                startActivity(intentSms);
+
+                return false;
+            }
+        });
 
         super.onCreateContextMenu(menu, v, menuInfo);
     }
