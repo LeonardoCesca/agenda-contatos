@@ -1,5 +1,6 @@
 package com.example.agenda_contatos;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,6 +13,7 @@ import android.view.MenuItem;
 public class Formulario extends AppCompatActivity {
 
     FormularioHelper helper;
+    Contato contato;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +29,13 @@ public class Formulario extends AppCompatActivity {
         Contato meuContato = new Contato();
 
         this.helper = new FormularioHelper(this);
+
+        Intent intent = this.getIntent();
+        this.contato = (Contato) intent.getSerializableExtra("contatoSelecionado");
+
+        if(this.contato != null) {
+            this.helper.colocaNoFormulario(contato);
+        }
     }
 
     @Override

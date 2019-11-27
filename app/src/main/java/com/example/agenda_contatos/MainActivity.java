@@ -38,6 +38,18 @@ public class MainActivity extends AppCompatActivity {
         });
         minhaLista = (ListView) findViewById(R.id.minhaLista);
         registerForContextMenu(minhaLista);
+
+        minhaLista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Contato contato;
+                contato = (Contato) parent.getItemAtPosition(position);
+
+                Intent intent = new Intent(MainActivity.this, Formulario.class);
+                intent.putExtra("contatoSelecionado", contato);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -68,8 +80,6 @@ public class MainActivity extends AppCompatActivity {
                             }
                         })
                         .setNegativeButton("Nao", null).show();
-
-
 
                 return false;
             }
