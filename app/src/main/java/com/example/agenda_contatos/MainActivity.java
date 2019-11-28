@@ -1,7 +1,9 @@
 package com.example.agenda_contatos;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -10,6 +12,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 
 import android.view.ContextMenu;
 import android.view.MenuItem;
@@ -51,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        permissaoSMS();
     }
 
     @Override
@@ -113,5 +118,18 @@ public class MainActivity extends AppCompatActivity {
         ContatoAdaptador adaptador = new ContatoAdaptador(contatos, this);
 
         this.minhaLista.setAdapter(adaptador);
+    }
+
+    private void permissaoSMS() {
+        if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.RECEIVE_SMS)) {
+
+            }else {
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.RECEIVE_SMS},0);
+            }
+
+        }else {
+
+        }
     }
 }
