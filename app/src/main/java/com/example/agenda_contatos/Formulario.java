@@ -1,6 +1,8 @@
 package com.example.agenda_contatos;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -52,7 +54,8 @@ public class Formulario extends AppCompatActivity {
         botaoFoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                carregaFotoCamera();
+                //carregaFotoCamera();
+                alertaSourceImagem();
             }
         });
 
@@ -94,20 +97,50 @@ public class Formulario extends AppCompatActivity {
 
     public void carregaFotoCamera(){
 
+        fotoResource = true;
+
         localArquivoFoto = getExternalFilesDir(null)+"/"+System.currentTimeMillis()+".jpeg";
         Intent intentCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         intentCamera.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName()+".provider", new File(localArquivoFoto)));
         startActivityForResult(intentCamera, 123);
     }
+    public void carregaFotoBiblioteca(){
+        fotoResource = false;
+    }
+
+    private void alertaSourceImagem(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Selecione a fonte da imagem:");
+        builder.setPositiveButton("Camera", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                carregaFotoCamera();
+            }
+        });
+        builder.setNegativeButton("Biblioteca", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                carregaFotoBiblioteca();
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == TIRA_FOTO){
-            if(resultCode == Activity.RESULT_OK){
-                helper.carregaImagem(this.localArquivoFoto);
-            }else{
-                this.localArquivoFoto = null;
+        if(fotoResource){
+            if (requestCode == TIRA_FOTO){
+                if(resultCode == Activity.RESULT_OK){
+                    helper.carregaImagem(this.localArquivoFoto);
+                }else{
+                    this.localArquivoFoto = null;
+                }
             }
+        }else{
+
         }
+
     }
 }
