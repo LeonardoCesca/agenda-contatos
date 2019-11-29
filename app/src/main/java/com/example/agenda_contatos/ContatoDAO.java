@@ -64,6 +64,7 @@ public class ContatoDAO extends SQLiteOpenHelper {
         values.put("telefone", contato.getTelefone());
         values.put("endereco", contato.getEndereco());
         getWritableDatabase().insert(TABELA,null,values);
+        values.put("caminhoFoto", contato.getFoto());
 
         String[] idParaAlterar = {contato.getId().toString()};
         getWritableDatabase().update(TABELA, values, "id=?", idParaAlterar);
