@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -18,8 +20,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import java.io.File;
+import java.io.InputStream;
 
 public class Formulario extends AppCompatActivity {
 
@@ -28,6 +32,9 @@ public class Formulario extends AppCompatActivity {
     private String localArquivoFoto;
     private static final int TIRA_FOTO = 123;
     private boolean fotoResource = false;
+
+    private Bitmap bitmap;
+    ImageView imagemContato;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +61,6 @@ public class Formulario extends AppCompatActivity {
         botaoFoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //carregaFotoCamera();
                 alertaSourceImagem();
             }
         });
@@ -106,6 +112,11 @@ public class Formulario extends AppCompatActivity {
     }
     public void carregaFotoBiblioteca(){
         fotoResource = false;
+
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Selecione uma imagem"), 1);
     }
 
     private void alertaSourceImagem(){
@@ -130,7 +141,26 @@ public class Formulario extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if(fotoResource){
+        if(!fotoResource){
+            if(resultCode == -1) {
+                InputStream stream = null;
+
+                try {
+
+                    if(bitmap != null) {
+                        bitmap.recycle();
+                    }
+
+                    stream = getContentResolver().openInputStream(data.getData());
+                    bitmap = BitmapFactory.decodeStream(stream);
+                    imagemContato.setImageBitmap(bitmap);
+
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }else{
             if (requestCode == TIRA_FOTO){
                 if(resultCode == Activity.RESULT_OK){
                     helper.carregaImagem(this.localArquivoFoto);
@@ -138,8 +168,6 @@ public class Formulario extends AppCompatActivity {
                     this.localArquivoFoto = null;
                 }
             }
-        }else{
-
         }
 
     }
