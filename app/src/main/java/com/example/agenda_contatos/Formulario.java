@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -24,6 +25,7 @@ import android.widget.ImageView;
 
 import java.io.File;
 import java.io.InputStream;
+import java.net.URI;
 
 public class Formulario extends AppCompatActivity {
 
@@ -113,10 +115,14 @@ public class Formulario extends AppCompatActivity {
     public void carregaFotoBiblioteca(){
         fotoResource = false;
 
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Selecione uma imagem"), 1);
+//        Intent intent = new Intent();
+//        intent.setType("image/*");
+//        intent.setAction(Intent.ACTION_GET_CONTENT);
+//        startActivityForResult(Intent.createChooser(intent, "Selecione uma imagem"), 1);
+        Intent i = new Intent(Intent.ACTION_PICK,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(i, 1);
+
     }
 
     private void alertaSourceImagem(){
@@ -143,21 +149,18 @@ public class Formulario extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(!fotoResource){
             if(resultCode == -1) {
-                InputStream stream = null;
 
-                try {
+                Uri imagemSel = data.getData();
+                String[] filePathColumn = {MediaStore.Images.Media.DATA};
+                Cursor cursor = getContentResolver().query(imagemSel, filePathColumn, null, null, null);
+                cursor.moveToFirst();
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                String caminhoFoto = cursor.getString(columnIndex);
+                cursor.close();
+                helper.carregaImagem(caminhoFoto);
 
-                    if(bitmap != null) {
-                        bitmap.recycle();
-                    }
 
-                    stream = getContentResolver().openInputStream(data.getData());
-                    bitmap = BitmapFactory.decodeStream(stream);
-                    imagemContato.setImageBitmap(bitmap);
 
-                }catch (Exception e) {
-                    e.printStackTrace();
-                }
             }
 
         }else{
